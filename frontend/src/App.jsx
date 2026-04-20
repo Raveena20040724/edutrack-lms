@@ -1,34 +1,26 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import React from 'react';
+import { AuthProvider, useAuth } from './context/AuthContext';
+import Login       from './pages/Login';
+import StudentApp  from './pages/student/StudentApp';
+import TrainerApp  from './pages/trainer/TrainerApp';
+import AdminApp    from './pages/admin/AdminApp';
+import './App.css';
 
-import Login from "./pages/Auth/Login";
-import Register from "./pages/Auth/Register";
-import CourseList from "./pages/Courses/CourseList";
-import CourseDetails from "./pages/Courses/CourseDetails";
-import VideoPlayer from "./pages/Video/VideoPlayer";
-import AssignmentList from "./pages/Assignments/AssignmentList";
-import Dashboard from "./pages/Dashboard/Dashboard";
-import Sidebar from "./components/Sidebar";
+const AppRouter = () => {
+  const { user } = useAuth();
 
-function App() {
-  return (
-    <BrowserRouter>
-      <div style={{ display: "flex" }}>
-        <Sidebar />
+  if (!user)                  return <Login />;
+  if (user.role === 'student') return <StudentApp />;
+  if (user.role === 'trainer') return <TrainerApp />;
+  if (user.role === 'admin')   return <AdminApp />;
 
-        <div style={{ flex: 1, padding: "20px" }}>
-          <Routes>
-            <Route path="/" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/courses" element={<CourseList />} />
-            <Route path="/courses/:id" element={<CourseDetails />} />
-            <Route path="/video/:id" element={<VideoPlayer />} />
-            <Route path="/assignments" element={<AssignmentList />} />
-          </Routes>
-        </div>
-      </div>
-    </BrowserRouter>
-  );
-}
+  return <Login />;
+};
+
+const App = () => (
+  <AuthProvider>
+    <AppRouter />
+  </AuthProvider>
+);
 
 export default App;
