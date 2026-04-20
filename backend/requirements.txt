@@ -1,0 +1,10 @@
+Django==3.2.25
+djangorestframework==3.14.0
+djangorestframework-simplejwt==4.8.0
+django-cors-headers==3.13.0
+psycopg2-binary==2.9.9
+python-decouple==3.8
+Pillow==9.5.0
+gunicorn==20.1.0
+cloudinary==1.36.0
+django-cloudinary-storage==0.3.0
