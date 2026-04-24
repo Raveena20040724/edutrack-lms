@@ -3,11 +3,11 @@ import Sidebar from '../../components/Sidebar';
 import Navbar from '../../components/Navbar';
 import { useAuth } from '../../context/AuthContext';
 
-import TrainerDashboard from '../trainer/TrainerDashboard';
-import MyCourses        from '../trainer/MyCourses';
-import UploadContent    from '../trainer/UploadContent';
-import GradeAssignments from '../trainer/GradeAssignments';
-import Students         from '../trainer/Students';
+import TrainerDashboard from './TrainerDashboard';
+import MyCourses        from './MyCourses';
+import UploadContent    from './UploadContent';
+import GradeAssignments from './GradeAssignments';
+import Students         from './Students';
 
 const menuItems = [
   { id: 'dashboard',   icon: '📊', label: 'Dashboard' },
