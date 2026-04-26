@@ -3,13 +3,13 @@ import Sidebar from '../../components/Sidebar';
 import Navbar from '../../components/Navbar';
 import { useAuth } from '../../context/AuthContext';
 
-import Dashboard    from '../student/Dashboard';
-import CourseList   from '../student/CourseList';
-import BrowseCourses from '../student/BrowseCourses';
-import VideoPlayer  from '../student/VideoPlayer';
-import AssignmentList from '../student/AssignmentList';
-import Results      from '../student/Results';
-import Profile      from '../student/Profile';
+import Dashboard    from './Dashboard';
+import CourseList   from './CourseList';
+import BrowseCourses from './BrowseCourses';
+import VideoPlayer  from './VideoPlayer';
+import AssignmentList from './AssignmentList';
+import Results      from './Results';
+import Profile      from './Profile';
 
 const menuItems = [
   { id: 'dashboard',   icon: '📊', label: 'Dashboard' },
