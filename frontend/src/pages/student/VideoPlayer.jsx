@@ -94,22 +94,40 @@ const VideoPlayer = () => {
     <div className="fade-in">
       <div style={{ display: 'grid', gridTemplateColumns: '3fr 1fr', gap: '18px' }}>
 
-        {/* Video Area */}
+        {/* ── Video Area ──────────────────────────────────────────────────── */}
         <div>
-          <div
-            className="video-player"
-            style={{ marginBottom: '16px' }}
-            onClick={() => setPlaying(!playing)}
-          >
-            {!playing
-              ? <div className="play-btn">▶</div>
-              : <div style={{ textAlign: 'center', color: '#fff' }}>
-                  <div style={{ fontSize: '32px', marginBottom: '8px' }}>▶</div>
-                  <p style={{ fontSize: '14px' }}>
-                    {active?.title || 'Select a lesson'} — Playing...
-                  </p>
-                </div>
-            }
+
+          {/* ✅ FIXED: real HTML5 video player using Cloudinary URL */}
+          <div style={{
+            borderRadius: '12px', overflow: 'hidden',
+            background: '#000', marginBottom: '16px',
+            aspectRatio: '16/9', display: 'flex',
+            alignItems: 'center', justifyContent: 'center',
+          }}>
+            {active?.video_url ? (
+              // key forces remount when lesson changes — stops old video playing
+              <video
+                key={active.video_url}
+                controls
+                style={{ width: '100%', height: '100%', display: 'block' }}
+                onEnded={handleMarkDone}
+              >
+                <source src={active.video_url} type="video/mp4" />
+                Your browser does not support video playback.
+              </video>
+            ) : active && !active.video_url ? (
+              // lesson exists but no video URL saved
+              <div style={{ textAlign: 'center', color: 'rgba(255,255,255,0.5)', padding: '40px' }}>
+                <p style={{ fontSize: '40px', marginBottom: '10px' }}>🎬</p>
+                <p style={{ fontSize: '14px' }}>No video available for this lesson yet.</p>
+              </div>
+            ) : (
+              // no lesson selected
+              <div style={{ textAlign: 'center', color: 'rgba(255,255,255,0.4)', padding: '40px' }}>
+                <p style={{ fontSize: '40px', marginBottom: '10px' }}>▶</p>
+                <p style={{ fontSize: '14px' }}>Select a lesson to start watching</p>
+              </div>
+            )}
           </div>
 
           <div className="card">
