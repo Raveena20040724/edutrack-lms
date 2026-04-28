@@ -64,7 +64,6 @@ class AssignmentDetailView(generics.RetrieveUpdateDestroyAPIView):
 
 
 # ── Submissions ───────────────────────────────────────────────────────────────
-
 class SubmitAssignmentView(APIView):
     """POST /api/assignments/<assignment_id>/submit/  — Student submits"""
     permission_classes = [permissions.IsAuthenticated]
@@ -72,15 +71,23 @@ class SubmitAssignmentView(APIView):
 
     def post(self, request, assignment_id):
         if request.user.role != 'student':
-            return Response({'detail': 'Only students can submit assignments.'}, status=status.HTTP_403_FORBIDDEN)
+            return Response(
+                {'detail': 'Only students can submit assignments.'},
+                status=status.HTTP_403_FORBIDDEN
+            )
 
         assignment = get_object_or_404(Assignment, pk=assignment_id)
 
-        # Check already submitted
         if Submission.objects.filter(assignment=assignment, student=request.user).exists():
-            return Response({'detail': 'You have already submitted this assignment.'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {'detail': 'You have already submitted this assignment.'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
 
-        serializer = SubmissionSerializer(data=request.data)
+        serializer = SubmissionSerializer(
+            data=request.data,
+            context={'request': request}
+        )
         if serializer.is_valid():
             serializer.save(
                 assignment=assignment,
@@ -88,6 +95,8 @@ class SubmitAssignmentView(APIView):
                 status='submitted',
             )
             return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        print("Submission errors:", serializer.errors)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 

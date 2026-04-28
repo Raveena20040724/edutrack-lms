@@ -66,11 +66,14 @@ WSGI_APPLICATION = 'edutrack_backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME':     config('DB_NAME',     default='edutrack_db'),
-        'USER':     config('DB_USER',     default='postgres'),
-        'PASSWORD': config('DB_PASSWORD', default='RaVa'),
-        'HOST':     config('DB_HOST',     default='localhost'),
-        'PORT':     config('DB_PORT',     default='5432'),
+        'NAME': 'neondb',
+        'USER': 'neondb_owner',
+        'PASSWORD': 'npg_BtxLhqSG2TV6',
+        'HOST': 'ep-mute-sky-am1u5z73-pooler.c-5.us-east-1.aws.neon.tech',
+        'PORT': '5432',
+        'OPTIONS': {
+            'sslmode': 'require',   # ✅ ADD THIS LINE
+        },
     }
 }
 
@@ -119,8 +122,15 @@ SIMPLE_JWT = {
 }
 
 # ── CORS ────────────────────────────────────────────────────────────────────
-CORS_ALLOWED_ORIGINS = [
-    config('FRONTEND_URL', default='http://localhost:3000'),
+CORS_ALLOWED_ORIGINS =  [
+    'http://localhost:3000',
+    'http://localhost:3001',
+    'http://localhost:3002',
+    'http://localhost:3003',
+    'http://127.0.0.1:3000',
+    'http://127.0.0.1:3001',
+    'http://127.0.0.1:3002',
+    'http://127.0.0.1:3003',
 ]
 CORS_ALLOW_CREDENTIALS = True
 
@@ -130,4 +140,4 @@ CLOUDINARY_STORAGE = {
     'API_KEY':    config('CLOUDINARY_API_KEY',    default=''),
     'API_SECRET': config('CLOUDINARY_API_SECRET', default=''),
 }
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'

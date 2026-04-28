@@ -33,12 +33,12 @@ class AssignmentSerializer(serializers.ModelSerializer):
 
 
 class SubmissionSerializer(serializers.ModelSerializer):
-    student_name    = serializers.CharField(source='student.full_name',    read_only=True)
-    student_email   = serializers.CharField(source='student.email',        read_only=True)
-    assignment_title = serializers.CharField(source='assignment.title',    read_only=True)
-    course_title    = serializers.CharField(source='assignment.course.title', read_only=True)
-    percentage      = serializers.ReadOnlyField()
-    graded_by_name  = serializers.CharField(source='graded_by.full_name', read_only=True)
+    student_name     = serializers.CharField(source='student.full_name',       read_only=True)
+    student_email    = serializers.CharField(source='student.email',           read_only=True)
+    assignment_title = serializers.CharField(source='assignment.title',        read_only=True)
+    course_title     = serializers.CharField(source='assignment.course.title', read_only=True)
+    percentage       = serializers.ReadOnlyField()
+    graded_by_name   = serializers.CharField(source='graded_by.full_name',    read_only=True)
 
     class Meta:
         model  = Submission
@@ -53,7 +53,11 @@ class SubmissionSerializer(serializers.ModelSerializer):
             'id', 'student', 'status', 'score', 'feedback',
             'graded_by', 'submitted_at', 'graded_at',
         ]
-
+        extra_kwargs = {
+            'assignment': {'required': False},  # ✅ set by view
+            'file':       {'required': False},  # ✅ file is optional
+            'notes':      {'required': False},  # ✅ notes is optional
+        }
 
 class GradeSubmissionSerializer(serializers.ModelSerializer):
     """Used by trainer to grade a submission."""
