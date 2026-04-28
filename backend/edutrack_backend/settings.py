@@ -66,13 +66,14 @@ WSGI_APPLICATION = 'edutrack_backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'neondb',
-        'USER': 'neondb_owner',
-        'PASSWORD': 'npg_BtxLhqSG2TV6',
-        'HOST': 'ep-mute-sky-am1u5z73-pooler.c-5.us-east-1.aws.neon.tech',
-        'PORT': '5432',
+        'NAME': config('DB_NAME'),
+        'USER': config('DB_USER'),
+        'PASSWORD': config('DB_PASSWORD'),
+        'HOST': config('DB_HOST'),
+        'PORT': config('DB_PORT', default='5432'),
+        'CONN_MAX_AGE': 600,
         'OPTIONS': {
-            'sslmode': 'require',   # ✅ ADD THIS LINE
+            'sslmode': 'require',
         },
     }
 }
