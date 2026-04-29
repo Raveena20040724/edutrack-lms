@@ -8,7 +8,7 @@ const ManageCourses = () => {
   const [loading, setLoading] = useState(true);
   const [modal, setModal]     = useState(false);
   const [editModal, setEditModal] = useState(null);
-  const [form, setForm]       = useState({ title: '', category: 'design', duration: '', description: '', icon: '📚' });
+  const [form, setForm]       = useState({ title: '', category: 'design', duration: '', description: ''});
   const [saving, setSaving]   = useState(false);
   const [message, setMessage] = useState('');
 
@@ -53,7 +53,7 @@ const ManageCourses = () => {
 
   if (loading) return (
     <div className="fade-in" style={{ textAlign: 'center', padding: '60px', color: 'var(--edu-sub)' }}>
-      ⏳ Loading courses...
+      ⟳ Loading courses...
     </div>
   );
 
@@ -84,7 +84,7 @@ const ManageCourses = () => {
           <tbody>
             {courses.map((c, i) => (
               <tr key={i}>
-                <td style={{ fontWeight: '600' }}>{c.icon || '📚'} {c.title}</td>
+                <td style={{ fontWeight: '600' }}>{c.title}</td>
                 <td><span className="badge badge-info">{c.category}</span></td>
                 <td>{c.instructor_name || '—'}</td>
                 <td>{c.enrolled_count || 0}</td>
@@ -92,7 +92,7 @@ const ManageCourses = () => {
                 <td><span className={`badge badge-${c.is_active ? 'success' : 'danger'}`}>{c.is_active ? 'Active' : 'Inactive'}</span></td>
                 <td>
                   <div style={{ display: 'flex', gap: '6px' }}>
-                    <button className="btn btn-ghost btn-sm" onClick={() => { setEditModal(c); setForm({ title: c.title, category: c.category, duration: c.duration, description: c.description, icon: c.icon || '📚' }); }}>Edit</button>
+                    <button className="btn btn-ghost btn-sm" onClick={() => { setEditModal(c); setForm({ title: c.title, category: c.category, duration: c.duration, description: c.description }); }}>Edit</button>
                     <button className="btn btn-danger btn-sm" onClick={() => handleRemove(c.id)}>Remove</button>
                   </div>
                 </td>
@@ -112,10 +112,6 @@ const ManageCourses = () => {
           <div className="form-group">
             <label className="label">Course Title</label>
             <input className="input" placeholder="e.g. Advanced Machine Learning" value={form.title} onChange={e=>setForm({...form,title:e.target.value})} />
-          </div>
-          <div className="form-group">
-            <label className="label">Icon (emoji)</label>
-            <input className="input" placeholder="📚" value={form.icon} onChange={e=>setForm({...form,icon:e.target.value})} />
           </div>
           <div className="form-group">
             <label className="label">Category</label>

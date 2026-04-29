@@ -14,7 +14,6 @@ class Course(models.Model):
 
     title       = models.CharField(max_length=200)
     description = models.TextField()
-    icon        = models.CharField(max_length=10, default='📚')
     category    = models.CharField(max_length=20, choices=CATEGORY_CHOICES, default='other')
     duration    = models.CharField(max_length=50, help_text='e.g. 8 weeks')
     instructor  = models.ForeignKey(

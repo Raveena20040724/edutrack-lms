@@ -5,7 +5,6 @@ from .models import Assignment, Submission
 
 class AssignmentSerializer(serializers.ModelSerializer):
     course_title      = serializers.CharField(source='course.title',    read_only=True)
-    course_icon       = serializers.CharField(source='course.icon',     read_only=True)
     created_by_name   = serializers.CharField(source='created_by.full_name', read_only=True)
     submission_status = serializers.SerializerMethodField()
     is_overdue        = serializers.SerializerMethodField()
@@ -13,7 +12,7 @@ class AssignmentSerializer(serializers.ModelSerializer):
     class Meta:
         model  = Assignment
         fields = [
-            'id', 'course', 'course_title', 'course_icon',
+            'id', 'course', 'course_title', 
             'title', 'instructions', 'due_date', 'max_score',
             'created_by', 'created_by_name',
             'submission_status', 'is_overdue', 'created_at',

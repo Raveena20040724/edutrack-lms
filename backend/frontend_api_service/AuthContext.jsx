@@ -69,7 +69,7 @@ export const AuthProvider = ({ children }) => {
         fontSize:       '18px',
         fontFamily:     'sans-serif',
       }}>
-        ⏳ Loading EduTrack...
+        ⟳ Loading EduTrack...
       </div>
     );
   }

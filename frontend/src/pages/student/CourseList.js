@@ -23,7 +23,7 @@ const CourseList = ({ onNavigate }) => {
   if (loading) {
     return (
       <div className="fade-in" style={{ textAlign: 'center', padding: '60px', color: 'var(--edu-sub)' }}>
-        ⏳ Loading courses...
+        ⟳ Loading courses...
       </div>
     );
   }
@@ -35,7 +35,6 @@ const CourseList = ({ onNavigate }) => {
 
       {enrollments.length === 0 && (
         <div style={{ textAlign: 'center', padding: '60px', color: 'var(--edu-sub)' }}>
-          <p style={{ fontSize: '48px', marginBottom: '12px' }}>📚</p>
           <p style={{ fontSize: '16px', fontWeight: '600', marginBottom: '8px' }}>No courses yet</p>
           <p style={{ fontSize: '13px', marginBottom: '16px' }}>Browse and enroll in courses to get started</p>
           <button className="btn btn-primary" onClick={() => onNavigate('browse')}>
@@ -47,7 +46,7 @@ const CourseList = ({ onNavigate }) => {
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '16px' }}>
         {enrollments.map((e) => (
           <div key={e.id} className="course-card">
-            <span style={{ fontSize: '32px' }}>{e.course_icon || '📚'}</span>
+            <span style={{ fontSize: '32px' }}></span>
             <h3 style={{ margin: '12px 0 4px', fontSize: '15px', fontWeight: '700' }}>
               {e.course_title}
             </h3>
@@ -55,7 +54,8 @@ const CourseList = ({ onNavigate }) => {
               {e.course_duration}
             </p>
             <div className="progress-bar" style={{ marginBottom: '8px' }}>
-              <div className="progress-fill" style={{ width: `${e.progress || 0}%` }} />
+              <div className="progress-fill" style={{ width: `${e.progress || 0}%` }}
+              />
             </div>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <span style={{ fontSize: '12px', color: 'var(--edu-sub)' }}>

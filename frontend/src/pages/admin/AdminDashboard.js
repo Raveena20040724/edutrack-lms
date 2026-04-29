@@ -39,7 +39,7 @@ const AdminDashboard = () => {
 
   if (loading) return (
     <div className="fade-in" style={{ textAlign: 'center', padding: '60px', color: 'var(--edu-sub)' }}>
-      ⏳ Loading dashboard...
+      ⟳ Loading dashboard...
     </div>
   );
 
@@ -68,7 +68,7 @@ const AdminDashboard = () => {
           {courses.map((c, i) => (
             <div key={i} style={{ marginBottom: '14px' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px' }}>
-                <span style={{ fontSize: '13px', fontWeight: '500' }}>{c.icon || '📚'} {c.title}</span>
+                <span style={{ fontSize: '13px', fontWeight: '500' }}>{c.title}</span>
                 <span style={{ fontSize: '12px', fontWeight: '700', color: 'var(--edu-accent)' }}>
                   {c.enrolled_count || 0}
                 </span>
@@ -92,8 +92,8 @@ const AdminDashboard = () => {
               : (u.username || 'U')[0].toUpperCase();
             const colors = ['#4f46e5','#06b6d4','#10b981','#f59e0b','#ef4444','#8b5cf6'];
             return (
-              <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '8px 0', borderBottom: '1px solid #f1f5f9' }}>
-                <div className="avatar" style={{ background: colors[i % colors.length], width: '32px', height: '32px', fontSize: '11px' }}>
+              <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '8px 0', borderBottom: '1px solid #f1f5f9' }}>
+                <div className="avatar" style={{ textAlign:'right',background: colors[i % colors.length], width: '32px', height: '32px', fontSize: '11px' }}>
                   {initials}
                 </div>
                 <div style={{ flex: 1 }}>

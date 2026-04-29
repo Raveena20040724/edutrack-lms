@@ -21,7 +21,7 @@ class CourseSerializer(serializers.ModelSerializer):
     class Meta:
         model  = Course
         fields = [
-            'id', 'title', 'description', 'icon', 'category', 'duration',
+            'id', 'title', 'description', 'category', 'duration',
             'instructor', 'instructor_name', 'thumbnail', 'is_active',
             'enrolled_count', 'lesson_count', 'rating', 'is_enrolled', 'created_at',
         ]
@@ -43,13 +43,12 @@ class CourseDetailSerializer(CourseSerializer):
 
 class EnrollmentSerializer(serializers.ModelSerializer):
     course_title    = serializers.CharField(source='course.title', read_only=True)
-    course_icon     = serializers.CharField(source='course.icon',  read_only=True)
     course_duration = serializers.CharField(source='course.duration', read_only=True)
     progress        = serializers.ReadOnlyField()
 
     class Meta:
         model  = Enrollment
-        fields = ['id', 'course', 'course_title', 'course_icon',
+        fields = ['id', 'course', 'course_title',
                   'course_duration', 'progress', 'enrolled_at']
         read_only_fields = ['id', 'enrolled_at']
 

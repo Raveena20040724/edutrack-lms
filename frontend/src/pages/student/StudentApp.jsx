@@ -5,37 +5,37 @@ import { useAuth } from '../../context/AuthContext';
 
 import Dashboard    from './Dashboard';
 import CourseList   from './CourseList';
-import BrowseCourses from './BrowseCourses';
 import VideoPlayer  from './VideoPlayer';
 import AssignmentList from './AssignmentList';
 import Results      from './Results';
-import Profile      from './Profile';
+import Profile       from './Profile';
 
 const menuItems = [
-  { id: 'dashboard',   icon: '📊', label: 'Dashboard' },
-  { id: 'courses',     icon: '📚', label: 'My Courses' },
-  { id: 'browse',      icon: '🔍', label: 'Browse' },
-  { id: 'videos',      icon: '🎬', label: 'Videos' },
-  { id: 'assignments', icon: '📝', label: 'Assignments' },
-  { id: 'results',     icon: '🏆', label: 'Results' },
-  { id: 'profile',     icon: '👤', label: 'Profile' },
+  { id: 'dashboard', label: 'Dashboard' },
+  { id: 'courses',  label: 'My Courses' },
+  { id: 'videos',    label: 'Videos' },
+  { id: 'assignments', label: 'Assignments' },
+  { id: 'results',  label: 'Results' },
+  { id: 'profile',   label: 'Profile' },
 ];
-
-const pages = {
-  dashboard:   (nav) => <Dashboard onNavigate={nav} />,
-  courses:     (nav) => <CourseList onNavigate={nav} />,
-  browse:      ()    => <BrowseCourses />,
-  videos:      ()    => <VideoPlayer />,
-  assignments: ()    => <AssignmentList />,
-  results:     ()    => <Results />,
-  profile:     ()    => <Profile />,
-};
 
 const StudentApp = () => {
   const { logout } = useAuth();
   const [page, setPage] = useState('dashboard');
+  const [searchQuery, setSearchQuery] = useState('');
 
-  const PageComponent = pages[page] || pages.dashboard;
+  // We define the page mapping inside the component now to access searchQuery
+  const renderPage = () => {
+    switch (page) {
+      case 'dashboard':   return <Dashboard onNavigate={setPage} />;
+      case 'courses':     return <CourseList />;
+      case 'videos':      return <VideoPlayer />;
+      case 'assignments': return <AssignmentList />;
+      case 'results':     return <Results />;
+      case 'profile':     return <Profile />;
+      default:            return <Dashboard onNavigate={setPage} />;
+    }
+  };
 
   return (
     <div className="app-layout">
@@ -47,9 +47,9 @@ const StudentApp = () => {
         onLogout={logout}
       />
       <div className="main-area">
-        <Navbar />
+        <Navbar search={searchQuery} onSearch={setSearchQuery} />
         <div className="page-content">
-          {PageComponent(setPage)}
+          {renderPage()}
         </div>
       </div>
     </div>
