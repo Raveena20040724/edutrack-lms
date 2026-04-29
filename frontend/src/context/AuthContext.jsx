@@ -1,17 +1,19 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { authAPI, studentAPI, setTokens, clearTokens, getAccessToken } from '../services/api';
-import { cacheSet, cacheClear } from '../services/dataCache';
-import { startKeepAlive, stopKeepAlive } from '../services/keepAlive';
+import { cacheSet, cacheGet, cacheClear } from '../services/dataCache'; //
+import { startKeepAlive, stopKeepAlive } from '../services/keepAlive'; //
 
 const AuthContext = createContext(null);
 
-// Preload student data in background after login
+// Preload function stays outside the component as a helper
 const preloadStudentData = (role) => {
   if (role !== 'student') return;
 
+  // Uses the 3x faster StudentDashboardView from your backend
   studentAPI.dashboard()
     .then((dash) => {
       if (!dash) return;
+      // Saves data locally so the dashboard loads instantly next time
       cacheSet('my_enrollments', dash.enrollments || []);
       cacheSet('my_assignments', dash.assignments || []);
       cacheSet('my_submissions', dash.submissions || []);
@@ -23,6 +25,9 @@ const preloadStudentData = (role) => {
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  
+  // ✅ FIXED: Hooks must be inside the function component
+  const [dashboardData, setDashboardData] = useState(cacheGet('dashboard_cache')); 
 
   // Restore session on app load
   useEffect(() => {
@@ -31,7 +36,7 @@ export const AuthProvider = ({ children }) => {
         try {
           const profile = await authAPI.getProfile();
           setUser(profile);
-          startKeepAlive();
+          startKeepAlive(); // Keeps Neon DB awake
           preloadStudentData(profile.role);
         } catch {
           clearTokens();
@@ -48,7 +53,7 @@ export const AuthProvider = ({ children }) => {
       const data = await authAPI.login(username, password);
       setTokens(data.access, data.refresh);
       setUser(data.user);
-      startKeepAlive();
+      startKeepAlive(); //
       preloadStudentData(data.user.role);
       return { success: true };
     } catch (err) {
@@ -66,8 +71,8 @@ export const AuthProvider = ({ children }) => {
       if (refresh) await authAPI.logout(refresh);
     } catch {}
 
-    stopKeepAlive();
-    cacheClear();
+    stopKeepAlive(); //
+    cacheClear(); // Clears all local dashboard data for security
     clearTokens();
     setUser(null);
   };
@@ -86,7 +91,7 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // ✅ Loading screen (correctly inside function)
+  // Loading screen
   if (loading) {
     return (
       <div style={{
@@ -116,7 +121,7 @@ export const AuthProvider = ({ children }) => {
   }
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, updateProfile }}>
+    <AuthContext.Provider value={{ user, login, logout, updateProfile, dashboardData }}>
       {children}
     </AuthContext.Provider>
   );

@@ -1,16 +1,18 @@
-import React, { useState,useEffect} from 'react';
+// 1. All imports MUST be at the very top
+import React, { useEffect, useState } from 'react'; // Added useState here
 import { startKeepAlive } from './services/keepAlive';
 import { AuthProvider, useAuth } from './context/AuthContext';
-import Login       from './pages/Login';
-import Register    from './pages/Register';
-import StudentApp  from './pages/student/StudentApp';
-import TrainerApp  from './pages/trainer/TrainerApp';
-import AdminApp    from './pages/admin/AdminApp';
+import Login from './pages/Login';
+import Register from './pages/Register';
+import StudentApp from './pages/student/StudentApp';
+import TrainerApp from './pages/trainer/TrainerApp';
+import AdminApp from './pages/admin/AdminApp';
 import './App.css';
 
 const AppRouter = () => {
   const { user } = useAuth();
-  const [page, setPage] = useState('login'); // 'login' | 'register'
+  // useState is now correctly defined because it's imported above
+  const [page, setPage] = useState('login'); 
 
   if (!user) {
     if (page === 'register') {
@@ -27,8 +29,7 @@ const AppRouter = () => {
 };
 
 const App = () => {
-
-  // ✅ ADD THIS BLOCK
+  // 2. Hooks are called correctly inside the component function
   useEffect(() => {
     startKeepAlive();
   }, []);

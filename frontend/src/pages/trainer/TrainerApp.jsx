@@ -29,7 +29,6 @@ const TrainerApp = () => {
   const renderPage = () => {
     switch (page) {
       case 'dashboard': return <TrainerDashboard onNavigate={setPage} />;
-      case 'browse':    return <BrowseCourses search={searchQuery} />; // Passes search prop
       case 'courses':   return <MyCourses onNavigate={setPage} />;
       case 'upload':    return <UploadContent />;
       case 'grade':     return <GradeAssignments />;
