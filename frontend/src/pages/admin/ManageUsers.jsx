@@ -66,7 +66,7 @@ const ManageUsers = () => {
 
   if (loading) return (
     <div className="fade-in" style={{ textAlign: 'center', padding: '60px', color: 'var(--edu-sub)' }}>
-      ⏳ Loading users...
+      ⟳ Loading users...
     </div>
   );
 
@@ -178,7 +178,7 @@ const ManageUsers = () => {
           <div style={{ display: 'flex', gap: '10px' }}>
             <button className="btn btn-ghost" style={{ flex: 1 }} onClick={() => setAddModal(false)}>Cancel</button>
             <button className="btn btn-primary" style={{ flex: 1, opacity: saving ? 0.7 : 1 }} onClick={handleAdd} disabled={saving}>
-              {saving ? '⏳ Creating...' : 'Create User'}
+              {saving ? '⟳ Creating...' : 'Create User'}
             </button>
           </div>
         </Modal>

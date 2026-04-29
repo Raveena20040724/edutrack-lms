@@ -1,19 +1,38 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { authAPI, setTokens, clearTokens, getAccessToken } from '../services/api';
+import { authAPI, studentAPI, setTokens, clearTokens, getAccessToken } from '../services/api';
+import { cacheSet, cacheClear } from '../services/dataCache';
+import { startKeepAlive, stopKeepAlive } from '../services/keepAlive';
 
 const AuthContext = createContext(null);
 
+// Preload student data in background after login
+const preloadStudentData = (role) => {
+  if (role !== 'student') return;
+
+  studentAPI.dashboard()
+    .then((dash) => {
+      if (!dash) return;
+      cacheSet('my_enrollments', dash.enrollments || []);
+      cacheSet('my_assignments', dash.assignments || []);
+      cacheSet('my_submissions', dash.submissions || []);
+      console.log('[Preload] Student data cached');
+    })
+    .catch(() => {});
+};
+
 export const AuthProvider = ({ children }) => {
-  const [user, setUser]       = useState(null);
+  const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // On app load — restore session if token exists in localStorage
+  // Restore session on app load
   useEffect(() => {
     const restoreSession = async () => {
       if (getAccessToken()) {
         try {
           const profile = await authAPI.getProfile();
           setUser(profile);
+          startKeepAlive();
+          preloadStudentData(profile.role);
         } catch {
           clearTokens();
         }
@@ -23,15 +42,20 @@ export const AuthProvider = ({ children }) => {
     restoreSession();
   }, []);
 
-  // Login — calls Django /api/auth/login/
+  // Login
   const login = async (username, password) => {
     try {
       const data = await authAPI.login(username, password);
       setTokens(data.access, data.refresh);
       setUser(data.user);
+      startKeepAlive();
+      preloadStudentData(data.user.role);
       return { success: true };
     } catch (err) {
-      return { success: false, error: err.detail || 'Login failed. Check credentials.' };
+      return {
+        success: false,
+        error: err.detail || 'Login failed. Check credentials.'
+      };
     }
   };
 
@@ -40,7 +64,10 @@ export const AuthProvider = ({ children }) => {
     try {
       const refresh = localStorage.getItem('refresh_token');
       if (refresh) await authAPI.logout(refresh);
-    } catch { /* ignore */ }
+    } catch {}
+
+    stopKeepAlive();
+    cacheClear();
     clearTokens();
     setUser(null);
   };
@@ -52,11 +79,14 @@ export const AuthProvider = ({ children }) => {
       setUser(updated);
       return { success: true };
     } catch (err) {
-      return { success: false, error: err.detail || 'Update failed.' };
+      return {
+        success: false,
+        error: err.detail || 'Update failed.'
+      };
     }
   };
 
-  // Loading screen while checking saved session
+  // ✅ Loading screen (correctly inside function)
   if (loading) {
     return (
       <div style={{
@@ -64,12 +94,23 @@ export const AuthProvider = ({ children }) => {
         alignItems: 'center',
         justifyContent: 'center',
         height: '100vh',
-        background: '#1a1a2e',
+        background: '#0A0F1E',
         color: '#fff',
         fontSize: '18px',
         fontFamily: 'sans-serif',
+        flexDirection: 'column',
+        gap: '12px',
       }}>
-        ⏳ Loading EduTrack...
+        <div style={{
+          width: '20px',
+          height: '20px',
+          borderRadius: '50%',
+          border: '2px solid rgba(255,255,255,0.2)',
+          borderTopColor: '#3B82F6',
+          animation: 'spin 0.8s linear infinite',
+        }} />
+        Loading EduTrack...
+        <style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style>
       </div>
     );
   }

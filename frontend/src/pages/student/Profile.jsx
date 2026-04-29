@@ -87,7 +87,7 @@ const Profile = () => {
             <input className="input" type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
           </div>
           <button className="btn btn-primary" onClick={handleSave} disabled={saving}>
-            {saving ? '⏳ Saving...' : 'Save Changes'}
+            {saving ? '⟳ Saving...' : 'Save Changes'}
           </button>
         </div>
 

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { coursesAPI, assignmentsAPI } from '../../services/api';
+import { cacheGet, cacheSet } from '../../services/dataCache';
 import '../../App.css';
 
 const Dashboard = ({ onNavigate }) => {
@@ -11,27 +12,57 @@ const Dashboard = ({ onNavigate }) => {
   const [loading, setLoading]         = useState(true);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [enrollData, assignData] = await Promise.all([
-          coursesAPI.myEnrollments(),
-          assignmentsAPI.mySubmissions(),
-        ]);
-        setEnrollments(Array.isArray(enrollData)      ? enrollData      : enrollData?.results      || []);
-        setAssignments(Array.isArray(assignData)      ? assignData      : assignData?.results      || []);
-        setActivity([
-          { text: 'You logged in successfully',   time: 'Just now',     type: 'success' },
-          { text: 'Check your assignments below', time: 'Today',        type: 'info'    },
-          { text: 'Keep learning every day!',     time: 'Motivation 🔥', type: 'purple'  },
-        ]);
-      } catch (err) {
-        console.error('Dashboard fetch error:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, []);
+  const cached = cacheGet('dashboard_data');
+
+  // ✅ 1. Show cached data instantly
+  if (cached) {
+    setEnrollments(cached.enrollments || []);
+    setAssignments(cached.assignments || []);
+    setActivity(cached.activity || []);
+    setLoading(false);
+  }
+
+  // ✅ 2. Fetch fresh data in background
+  (async () => {
+    try {
+      const [enrollData, assignData] = await Promise.all([
+        coursesAPI.myEnrollments(),
+        assignmentsAPI.mySubmissions(),
+      ]);
+
+      const enrollmentsList = Array.isArray(enrollData)
+        ? enrollData
+        : enrollData?.results || [];
+
+      const assignmentsList = Array.isArray(assignData)
+        ? assignData
+        : assignData?.results || [];
+
+      const activityData = [
+        { text: 'You logged in successfully',   time: 'Just now',     type: 'success' },
+        { text: 'Check your assignments below', time: 'Today',        type: 'info'    },
+        { text: 'Keep learning every day!',     time: 'Motivation 🔥', type: 'purple'  },
+      ];
+
+      // ✅ Update UI
+      setEnrollments(enrollmentsList);
+      setAssignments(assignmentsList);
+      setActivity(activityData);
+
+      // ✅ Save to cache
+      cacheSet('dashboard_data', {
+        enrollments: enrollmentsList,
+        assignments: assignmentsList,
+        activity: activityData,
+      });
+
+    } catch (err) {
+      console.error('Dashboard fetch error:', err);
+    } finally {
+      setLoading(false);
+    }
+  })();
+}, []);
 
   const pending = assignments.filter((a) => a.status === 'submitted');
   const graded  = assignments.filter((a) => a.status === 'graded');
@@ -49,7 +80,7 @@ const Dashboard = ({ onNavigate }) => {
   if (loading) {
     return (
       <div className="fade-in" style={{ textAlign: 'center', padding: '60px', color: 'var(--edu-sub)' }}>
-        ⏳ Loading dashboard...
+        ⟳ Loading dashboard...
       </div>
     );
   }
@@ -75,22 +106,14 @@ const Dashboard = ({ onNavigate }) => {
           <div className="card-title">My Courses</div>
           {enrollments.length === 0 && (
             <div style={{ textAlign: 'center', padding: '20px', color: 'var(--edu-sub)' }}>
-              <p style={{ fontSize: '32px', marginBottom: '8px' }}>📚</p>
               <p style={{ fontSize: '13px' }}>No courses yet.</p>
-              <button
-                className="btn btn-primary btn-sm"
-                style={{ marginTop: '10px' }}
-                onClick={() => onNavigate('browse')}
-              >
-                Browse Courses
-              </button>
             </div>
           )}
           {enrollments.map((e) => (
             <div key={e.id} style={{ marginBottom: '16px' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
                 <span style={{ fontSize: '13px', fontWeight: '600' }}>
-                  {e.course_icon} {e.course_title}
+                   {e.course_title}
                 </span>
                 <span style={{ fontSize: '12px', color: 'var(--edu-sub)' }}>{e.progress}%</span>
               </div>

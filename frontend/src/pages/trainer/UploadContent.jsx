@@ -183,7 +183,7 @@ const UploadContent = () => {
             disabled={uploading}
             style={{ opacity: uploading ? 0.7 : 1 }}
           >
-            {uploading ? '⏳ Uploading...' : 'Upload Video'}
+            {uploading ? '⟳ Uploading...' : 'Upload Video'}
           </button>
         </div>
 
