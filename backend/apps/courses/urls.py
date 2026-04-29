@@ -2,6 +2,9 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
+    # urls.py
+
+    path('ping/', views.ping),
     # Course CRUD
     path('',                                    views.CourseListView.as_view(),         name='course_list'),
     path('<int:pk>/',                           views.CourseDetailView.as_view(),       name='course_detail'),
@@ -30,4 +33,6 @@ urlpatterns = [
 
     # Admin
     path('admin/all/',                          views.AdminCourseListView.as_view(),    name='admin_all_courses'),
+
+    path('student/dashboard/', views.StudentDashboardView.as_view(), name='student_dashboard'),
 ]

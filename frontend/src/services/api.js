@@ -129,3 +129,8 @@ export const assignmentsAPI = {
   trainerAnalytics:()                => request('/assignments/analytics/'),
   adminAnalytics:  ()                => request('/assignments/admin/analytics/'),
 };
+
+// ── STUDENT DASHBOARD API (single call = 3x faster) ──────────────────────────
+export const studentAPI = {
+  dashboard: () => request('/courses/student/dashboard/'),
+};
