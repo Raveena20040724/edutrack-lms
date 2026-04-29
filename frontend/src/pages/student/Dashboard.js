@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { coursesAPI, assignmentsAPI } from '../../services/api';
+import { cacheGet, cacheSet } from '../../services/dataCache';
 import '../../App.css';
 
 const Dashboard = ({ onNavigate }) => {
@@ -11,27 +12,57 @@ const Dashboard = ({ onNavigate }) => {
   const [loading, setLoading]         = useState(true);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [enrollData, assignData] = await Promise.all([
-          coursesAPI.myEnrollments(),
-          assignmentsAPI.mySubmissions(),
-        ]);
-        setEnrollments(Array.isArray(enrollData)      ? enrollData      : enrollData?.results      || []);
-        setAssignments(Array.isArray(assignData)      ? assignData      : assignData?.results      || []);
-        setActivity([
-          { text: 'You logged in successfully',   time: 'Just now',     type: 'success' },
-          { text: 'Check your assignments below', time: 'Today',        type: 'info'    },
-          { text: 'Keep learning every day!',     time: 'Motivation 🔥', type: 'purple'  },
-        ]);
-      } catch (err) {
-        console.error('Dashboard fetch error:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, []);
+  const cached = cacheGet('dashboard_data');
+
+  // ✅ 1. Show cached data instantly
+  if (cached) {
+    setEnrollments(cached.enrollments || []);
+    setAssignments(cached.assignments || []);
+    setActivity(cached.activity || []);
+    setLoading(false);
+  }
+
+  // ✅ 2. Fetch fresh data in background
+  (async () => {
+    try {
+      const [enrollData, assignData] = await Promise.all([
+        coursesAPI.myEnrollments(),
+        assignmentsAPI.mySubmissions(),
+      ]);
+
+      const enrollmentsList = Array.isArray(enrollData)
+        ? enrollData
+        : enrollData?.results || [];
+
+      const assignmentsList = Array.isArray(assignData)
+        ? assignData
+        : assignData?.results || [];
+
+      const activityData = [
+        { text: 'You logged in successfully',   time: 'Just now',     type: 'success' },
+        { text: 'Check your assignments below', time: 'Today',        type: 'info'    },
+        { text: 'Keep learning every day!',     time: 'Motivation 🔥', type: 'purple'  },
+      ];
+
+      // ✅ Update UI
+      setEnrollments(enrollmentsList);
+      setAssignments(assignmentsList);
+      setActivity(activityData);
+
+      // ✅ Save to cache
+      cacheSet('dashboard_data', {
+        enrollments: enrollmentsList,
+        assignments: assignmentsList,
+        activity: activityData,
+      });
+
+    } catch (err) {
+      console.error('Dashboard fetch error:', err);
+    } finally {
+      setLoading(false);
+    }
+  })();
+}, []);
 
   const pending = assignments.filter((a) => a.status === 'submitted');
   const graded  = assignments.filter((a) => a.status === 'graded');

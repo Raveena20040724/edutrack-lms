@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect} from 'react';
+import { startKeepAlive } from './services/keepAlive';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import Login       from './pages/Login';
 import Register    from './pages/Register';
@@ -25,10 +26,18 @@ const AppRouter = () => {
   return <Login onGoRegister={() => setPage('register')} />;
 };
 
-const App = () => (
-  <AuthProvider>
-    <AppRouter />
-  </AuthProvider>
-);
+const App = () => {
+
+  // ✅ ADD THIS BLOCK
+  useEffect(() => {
+    startKeepAlive();
+  }, []);
+
+  return (
+    <AuthProvider>
+      <AppRouter />
+    </AuthProvider>
+  );
+};
 
 export default App;
