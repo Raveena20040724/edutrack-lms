@@ -1,35 +1,42 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'; // Hooks stay here
 import Sidebar from '../../components/Sidebar';
 import Navbar from '../../components/Navbar';
 import { useAuth } from '../../context/AuthContext';
 
+// Import the components used in the pages object
 import TrainerDashboard from './TrainerDashboard';
-import MyCourses        from './MyCourses';
-import UploadContent    from './UploadContent';
+import MyCourses from './MyCourses';
+import UploadContent from './UploadContent';
 import GradeAssignments from './GradeAssignments';
-import Students         from './Students';
+import Students from './Students';
 
 const menuItems = [
-  { id: 'dashboard',   icon: '📊', label: 'Dashboard' },
-  { id: 'courses',     icon: '📚', label: 'My Courses' },
-  { id: 'upload',      icon: '⬆️', label: 'Upload Content' },
-  { id: 'grade',       icon: '📝', label: 'Grade Work' },
-  { id: 'students',    icon: '👥', label: 'Students' },
+  { id: 'dashboard', label: 'Dashboard' },
+  { id: 'courses',label: 'My Courses' },
+  { id: 'upload', label: 'Upload Content' },
+  { id: 'grade', label: 'Grade Work' },
+  { id: 'students', label: 'Students' },
 ];
-
-const pages = {
-  dashboard: (nav) => <TrainerDashboard onNavigate={nav} />,
-  courses:   (nav) => <MyCourses onNavigate={nav} />,
-  upload:    ()    => <UploadContent />,
-  grade:     ()    => <GradeAssignments />,
-  students:  ()    => <Students />,
-};
 
 const TrainerApp = () => {
   const { logout } = useAuth();
+  
+  // FIX 1: Hooks must be INSIDE the component function
   const [page, setPage] = useState('dashboard');
+  const [searchQuery, setSearchQuery] = useState(''); 
 
-  const PageComponent = pages[page] || pages.dashboard;
+  // Define how pages render
+  const renderPage = () => {
+    switch (page) {
+      case 'dashboard': return <TrainerDashboard onNavigate={setPage} />;
+      case 'browse':    return <BrowseCourses search={searchQuery} />; // Passes search prop
+      case 'courses':   return <MyCourses onNavigate={setPage} />;
+      case 'upload':    return <UploadContent />;
+      case 'grade':     return <GradeAssignments />;
+      case 'students':  return <Students />;
+      default:          return <TrainerDashboard onNavigate={setPage} />;
+    }
+  };
 
   return (
     <div className="app-layout">
@@ -41,9 +48,11 @@ const TrainerApp = () => {
         onLogout={logout}
       />
       <div className="main-area">
-        <Navbar />
+        {/* Pass setSearchQuery to Navbar so typing updates state */}
+        <Navbar onSearch={setSearchQuery} /> 
+        
         <div className="page-content">
-          {PageComponent(setPage)}
+          {renderPage()}
         </div>
       </div>
     </div>

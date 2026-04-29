@@ -54,7 +54,7 @@ const AssignmentList = () => {
   if (loading) {
     return (
       <div className="fade-in" style={{ textAlign: 'center', padding: '60px', color: 'var(--edu-sub)' }}>
-        ⏳ Loading assignments...
+        ⟳ Loading assignments...
       </div>
     );
   }
@@ -85,7 +85,7 @@ const AssignmentList = () => {
               {assignments.map((a) => (
                 <tr key={a.id}>
                   <td style={{ fontWeight: '600' }}>{a.title}</td>
-                  <td>{a.course_icon} {a.course_title}</td>
+                  <td>{a.course_title}</td>
                   <td>{a.due_date}</td>
                   <td>{statusBadge(a.submission_status)}</td>
                   <td>
@@ -138,7 +138,7 @@ const AssignmentList = () => {
               onClick={handleSubmit}
               disabled={submitting}
             >
-              {submitting ? '⏳ Submitting...' : 'Submit Assignment'}
+              {submitting ? '⟳ Submitting...' : 'Submit Assignment'}
             </button>
           </div>
         </Modal>

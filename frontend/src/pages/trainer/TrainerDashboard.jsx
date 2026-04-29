@@ -39,7 +39,7 @@ const TrainerDashboard = ({ onNavigate }) => {
 
   if (loading) return (
     <div className="fade-in" style={{ textAlign: 'center', padding: '60px', color: 'var(--edu-sub)' }}>
-      ⏳ Loading dashboard...
+      ⟳ Loading dashboard...
     </div>
   );
 

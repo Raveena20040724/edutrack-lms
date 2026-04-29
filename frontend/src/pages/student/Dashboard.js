@@ -49,7 +49,7 @@ const Dashboard = ({ onNavigate }) => {
   if (loading) {
     return (
       <div className="fade-in" style={{ textAlign: 'center', padding: '60px', color: 'var(--edu-sub)' }}>
-        ⏳ Loading dashboard...
+        ⟳ Loading dashboard...
       </div>
     );
   }
@@ -75,22 +75,14 @@ const Dashboard = ({ onNavigate }) => {
           <div className="card-title">My Courses</div>
           {enrollments.length === 0 && (
             <div style={{ textAlign: 'center', padding: '20px', color: 'var(--edu-sub)' }}>
-              <p style={{ fontSize: '32px', marginBottom: '8px' }}>📚</p>
               <p style={{ fontSize: '13px' }}>No courses yet.</p>
-              <button
-                className="btn btn-primary btn-sm"
-                style={{ marginTop: '10px' }}
-                onClick={() => onNavigate('browse')}
-              >
-                Browse Courses
-              </button>
             </div>
           )}
           {enrollments.map((e) => (
             <div key={e.id} style={{ marginBottom: '16px' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
                 <span style={{ fontSize: '13px', fontWeight: '600' }}>
-                  {e.course_icon} {e.course_title}
+                   {e.course_title}
                 </span>
                 <span style={{ fontSize: '12px', color: 'var(--edu-sub)' }}>{e.progress}%</span>
               </div>

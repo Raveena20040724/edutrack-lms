@@ -8,7 +8,7 @@ const MyCourses = ({ onNavigate }) => {
   const [loading, setLoading] = useState(true);
   const [addModal, setAddModal]   = useState(false);
   const [editModal, setEditModal] = useState(null);
-  const [form, setForm] = useState({ title: '', category: 'design', duration: '', description: '', icon: '📚' });
+  const [form, setForm] = useState({ title: '', category: 'design', duration: '', description: '' });
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState('');
 
@@ -29,7 +29,7 @@ const MyCourses = ({ onNavigate }) => {
       await coursesAPI.create(form);
       setMessage('✅ Course created!');
       setAddModal(false);
-      setForm({ title: '', category: 'design', duration: '', description: '', icon: '📚' });
+      setForm({ title: '', category: 'design', duration: '', description: ''});
       fetchCourses();
     } catch (err) {
       setMessage('❌ ' + (err.detail || JSON.stringify(err)));
@@ -50,12 +50,12 @@ const MyCourses = ({ onNavigate }) => {
 
   const openEdit = (c) => {
     setEditModal(c);
-    setForm({ title: c.title, category: c.category, duration: c.duration, description: c.description, icon: c.icon || '📚' });
+    setForm({ title: c.title, category: c.category, duration: c.duration, description: c.description });
   };
 
   if (loading) return (
     <div className="fade-in" style={{ textAlign: 'center', padding: '60px', color: 'var(--edu-sub)' }}>
-      ⏳ Loading courses...
+      ⟳ Loading courses...
     </div>
   );
 
@@ -80,7 +80,7 @@ const MyCourses = ({ onNavigate }) => {
 
       {courses.length === 0 && (
         <div style={{ textAlign: 'center', padding: '60px', color: 'var(--edu-sub)' }}>
-          <p style={{ fontSize: '48px', marginBottom: '12px' }}>📚</p>
+          <p style={{ fontSize: '48px', marginBottom: '12px' }}></p>
           <p style={{ fontSize: '14px', marginBottom: '16px' }}>No courses yet. Create your first course!</p>
           <button className="btn btn-primary" onClick={() => setAddModal(true)}>+ Create Course</button>
         </div>
@@ -89,7 +89,7 @@ const MyCourses = ({ onNavigate }) => {
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '16px' }}>
         {courses.map((c) => (
           <div key={c.id} className="course-card">
-            <span style={{ fontSize: '32px' }}>{c.icon || '📚'}</span>
+            <span style={{ fontSize: '32px' }}></span>
             <h3 style={{ fontSize: '15px', fontWeight: '700', margin: '10px 0 4px', lineHeight: 1.3 }}>{c.title}</h3>
             <div style={{ display: 'flex', gap: '8px', marginBottom: '12px', flexWrap: 'wrap' }}>
               <span className="badge badge-info">{c.category}</span>
@@ -108,10 +108,6 @@ const MyCourses = ({ onNavigate }) => {
         <Modal onClose={() => setAddModal(false)}>
           <div className="modal-title">Create New Course</div>
           {message && <div style={{ color: message.startsWith('✅') ? '#065f46' : '#dc2626', fontSize: '13px', marginBottom: '10px' }}>{message}</div>}
-          <div className="form-group">
-            <label className="label">Icon (emoji)</label>
-            <input className="input" placeholder="📚" value={form.icon} onChange={e => setForm({ ...form, icon: e.target.value })} />
-          </div>
           <div className="form-group">
             <label className="label">Course Title *</label>
             <input className="input" placeholder="e.g. Advanced Machine Learning" value={form.title} onChange={e => setForm({ ...form, title: e.target.value })} />
@@ -133,7 +129,7 @@ const MyCourses = ({ onNavigate }) => {
           <div style={{ display: 'flex', gap: '10px' }}>
             <button className="btn btn-ghost" style={{ flex: 1 }} onClick={() => setAddModal(false)}>Cancel</button>
             <button className="btn btn-primary" style={{ flex: 1, opacity: saving ? 0.7 : 1 }} onClick={handleCreate} disabled={saving}>
-              {saving ? '⏳ Creating...' : 'Create Course'}
+              {saving ? ' ⟳ Creating...' : 'Create Course'}
             </button>
           </div>
         </Modal>
@@ -143,10 +139,6 @@ const MyCourses = ({ onNavigate }) => {
       {editModal && (
         <Modal onClose={() => setEditModal(null)}>
           <div className="modal-title">Edit: {editModal.title}</div>
-          <div className="form-group">
-            <label className="label">Icon (emoji)</label>
-            <input className="input" value={form.icon} onChange={e => setForm({ ...form, icon: e.target.value })} />
-          </div>
           <div className="form-group">
             <label className="label">Course Title</label>
             <input className="input" value={form.title} onChange={e => setForm({ ...form, title: e.target.value })} />
@@ -168,7 +160,7 @@ const MyCourses = ({ onNavigate }) => {
           <div style={{ display: 'flex', gap: '10px' }}>
             <button className="btn btn-ghost" style={{ flex: 1 }} onClick={() => setEditModal(null)}>Cancel</button>
             <button className="btn btn-primary" style={{ flex: 1, opacity: saving ? 0.7 : 1 }} onClick={handleEdit} disabled={saving}>
-              {saving ? '⏳ Saving...' : 'Save Changes'}
+              {saving ? '⟳ Saving...' : 'Save Changes'}
             </button>
           </div>
         </Modal>

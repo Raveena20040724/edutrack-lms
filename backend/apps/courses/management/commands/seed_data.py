@@ -122,11 +122,11 @@ class Command(BaseCommand):
             self.stdout.write(f'  Created {role}: {username}')
         return user
 
-    def _create_course(self, instructor, icon, title, description, category, duration):
+    def _create_course(self, instructor, title, description, category, duration):
         course, created = Course.objects.get_or_create(
             title=title,
             defaults={
-                'icon': icon, 'description': description,
+                'description': description,
                 'category': category, 'duration': duration,
                 'instructor': instructor,
             }

@@ -57,13 +57,13 @@ const Students = () => {
         <div className="form-group" style={{ maxWidth: '320px', marginBottom: '16px' }}>
           <label className="label">Filter by Course</label>
           <select className="input" value={selected || ''} onChange={e => handleCourseChange(parseInt(e.target.value))}>
-            {courses.map(c => <option key={c.id} value={c.id}>{c.icon || '📚'} {c.title}</option>)}
+            {courses.map(c => <option key={c.id} value={c.id}>{c.title}</option>)}
           </select>
         </div>
       )}
 
       {loading ? (
-        <div style={{ textAlign: 'center', padding: '40px', color: 'var(--edu-sub)' }}>⏳ Loading students...</div>
+        <div style={{ textAlign: 'center', padding: '40px', color: 'var(--edu-sub)' }}>⟳ Loading students...</div>
       ) : students.length === 0 ? (
         <div className="card" style={{ textAlign: 'center', padding: '40px' }}>
           <p style={{ fontSize: '48px', marginBottom: '12px' }}>👥</p>

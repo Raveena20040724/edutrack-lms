@@ -36,7 +36,7 @@ const Reports = () => {
 
   if (loading) return (
     <div className="fade-in" style={{ textAlign: 'center', padding: '60px', color: 'var(--edu-sub)' }}>
-      ⏳ Loading reports...
+      ⟳ Loading reports...
     </div>
   );
 
@@ -95,7 +95,7 @@ const Reports = () => {
             <tbody>
               {courses.map((c, i) => (
                 <tr key={i}>
-                  <td style={{ fontSize: '12px', fontWeight: '600' }}>{c.icon || '📚'} {c.title}</td>
+                  <td style={{ fontSize: '12px', fontWeight: '600' }}>{c.title}</td>
                   <td>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                       <div className="progress-bar" style={{ width: '60px' }}>
