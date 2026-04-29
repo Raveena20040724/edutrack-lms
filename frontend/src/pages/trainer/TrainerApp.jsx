@@ -23,7 +23,6 @@ const TrainerApp = () => {
   
   // FIX 1: Hooks must be INSIDE the component function
   const [page, setPage] = useState('dashboard');
-  const [searchQuery, setSearchQuery] = useState(''); 
 
   // Define how pages render
   const renderPage = () => {

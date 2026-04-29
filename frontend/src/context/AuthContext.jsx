@@ -27,7 +27,7 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   
   // ✅ FIXED: Hooks must be inside the function component
-  const [dashboardData, setDashboardData] = useState(cacheGet('dashboard_cache')); 
+  const [dashboardData] = useState(cacheGet('dashboard_cache')); 
 
   // Restore session on app load
   useEffect(() => {

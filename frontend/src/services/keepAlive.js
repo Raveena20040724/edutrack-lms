@@ -10,7 +10,6 @@ export const startKeepAlive = () => {
 
   interval = setInterval(async () => {
     try {
-      const token = localStorage.getItem('access_token');
 
       await fetch(`${BASE_URL}/ping/`);
     } catch {
