@@ -46,8 +46,6 @@ const TrainerApp = () => {
         onLogout={logout}
       />
       <div className="main-area">
-        {/* Pass setSearchQuery to Navbar so typing updates state */}
-        <Navbar onSearch={setSearchQuery} /> 
         
         <div className="page-content">
           {renderPage()}
