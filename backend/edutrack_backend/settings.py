@@ -128,6 +128,7 @@ SIMPLE_JWT = {
 # ── CORS ────────────────────────────────────────────────────────────────────
 CORS_ALLOWED_ORIGINS = [
     "https://stupendous-frangipane-602bc3.netlify.app",
+    "http://localhost:3001",
     "http://localhost:3000",
 ]
 
