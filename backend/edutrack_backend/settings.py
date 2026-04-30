@@ -7,7 +7,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config('SECRET_KEY', default='django-insecure-change-me-in-production')
 DEBUG = config('DEBUG', default=False, cast=bool)
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['edutrack-backend-2ch2.onrender.com',
+    'localhost',
+    '127.0.0.1']
 # Applications
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -125,9 +127,14 @@ SIMPLE_JWT = {
 
 # ── CORS ────────────────────────────────────────────────────────────────────
 CORS_ALLOWED_ORIGINS = [
-    config('FRONTEND_URL')
+    "https://steady-praline-5ba962.netlify.app",
+    "https://stupendous-frangipane-602bc3.netlify.app",
+    "http://localhost:3001",
+    "http://localhost:3000",
 ]
-
+CSRF_TRUSTED_ORIGINS = [
+    "https://steady-praline-5ba962.netlify.app",
+]
 CORS_ALLOW_CREDENTIALS = True
 
 CORS_ALLOWED_ORIGIN_REGEXES = [

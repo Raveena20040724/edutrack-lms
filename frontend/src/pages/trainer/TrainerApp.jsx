@@ -23,13 +23,11 @@ const TrainerApp = () => {
   
   // FIX 1: Hooks must be INSIDE the component function
   const [page, setPage] = useState('dashboard');
-  const [searchQuery, setSearchQuery] = useState(''); 
 
   // Define how pages render
   const renderPage = () => {
     switch (page) {
       case 'dashboard': return <TrainerDashboard onNavigate={setPage} />;
-      case 'browse':    return <BrowseCourses search={searchQuery} />; // Passes search prop
       case 'courses':   return <MyCourses onNavigate={setPage} />;
       case 'upload':    return <UploadContent />;
       case 'grade':     return <GradeAssignments />;
@@ -48,8 +46,6 @@ const TrainerApp = () => {
         onLogout={logout}
       />
       <div className="main-area">
-        {/* Pass setSearchQuery to Navbar so typing updates state */}
-        <Navbar onSearch={setSearchQuery} /> 
         
         <div className="page-content">
           {renderPage()}
