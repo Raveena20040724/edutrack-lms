@@ -131,7 +131,9 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:3001",
     "http://localhost:3000",
 ]
-
+CSRF_TRUSTED_ORIGINS = [
+    "https://stupendous-frangipane-602bc3.netlify.app",
+]
 CORS_ALLOW_CREDENTIALS = True
 
 CORS_ALLOWED_ORIGIN_REGEXES = [

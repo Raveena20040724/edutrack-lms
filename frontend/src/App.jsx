@@ -1,5 +1,4 @@
-// 1. All imports MUST be at the very top
-import React, { useEffect, useState } from 'react'; // Added useState here
+import React, { useEffect, useState } from 'react';
 import { startKeepAlive } from './services/keepAlive';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import Login from './pages/Login';
@@ -11,7 +10,6 @@ import './App.css';
 
 const AppRouter = () => {
   const { user } = useAuth();
-  // useState is now correctly defined because it's imported above
   const [page, setPage] = useState('login'); 
 
   if (!user) {
@@ -21,6 +19,7 @@ const AppRouter = () => {
     return <Login onGoRegister={() => setPage('register')} />;
   }
 
+  // Role-based routing after login
   if (user.role === 'student') return <StudentApp />;
   if (user.role === 'trainer') return <TrainerApp />;
   if (user.role === 'admin')   return <AdminApp />;
@@ -29,7 +28,6 @@ const AppRouter = () => {
 };
 
 const App = () => {
-  // 2. Hooks are called correctly inside the component function
   useEffect(() => {
     startKeepAlive();
   }, []);
