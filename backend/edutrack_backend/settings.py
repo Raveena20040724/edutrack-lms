@@ -127,12 +127,13 @@ SIMPLE_JWT = {
 
 # ── CORS ────────────────────────────────────────────────────────────────────
 CORS_ALLOWED_ORIGINS = [
+    "https://steady-praline-5ba962.netlify.app",
     "https://stupendous-frangipane-602bc3.netlify.app",
     "http://localhost:3001",
     "http://localhost:3000",
 ]
 CSRF_TRUSTED_ORIGINS = [
-    "https://stupendous-frangipane-602bc3.netlify.app",
+    "https://steady-praline-5ba962.netlify.app",
 ]
 CORS_ALLOW_CREDENTIALS = True
 
